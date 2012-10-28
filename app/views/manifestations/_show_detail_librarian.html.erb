@@ -95,6 +95,9 @@
                   ( <%= manifestation.isbn10 -%> )
                 <%- end -%>
               <%- end -%>
+              <%- if manifestation.isdn.present? -%>
+                ISDN: <%= manifestation.isdn -%>
+              <%- end -%>
               <%- if manifestation.nbn.present? -%>
                 NBN: <%= manifestation.nbn -%>
               <%- end -%>

@@ -276,6 +276,7 @@ ja:
         isbn: ISBN
         isbn10: 10桁のISBN
         wrong_isbn: 間違ったISBN
+        isdn: ISDN
         nbn: NBN
         price: 価格
         volume_number: 巻（数字）
@@ -646,6 +647,7 @@ ja:
     serial: "定期刊行物"
     number: "巻号"
     invalid_isbn: "無効なISBNです。"
+    invalid_isdn: "無効なISDNです。"
     already_imported: "すでにインポートされています。"
     record_not_found: "資料が見つかりませんでした。"
     add: "資料を追加する"

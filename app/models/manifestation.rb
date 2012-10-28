@@ -9,7 +9,7 @@ class Manifestation < ActiveRecord::Base
     :title_alternative_transcription, :description, :abstract, :available_at,
     :valid_until, :date_submitted, :date_accepted, :date_captured, :ndl_bib_id,
     :pub_date, :edition_string, :volume_number, :issue_number, :serial_number,
-    :ndc, :content_type_id, :online_isbn, :attachment,
+    :ndc, :content_type_id, :online_isbn, :attachment, :isdn,
     :series_has_manifestation_attributes
 
   scope :periodical_master, where(:periodical => false)
@@ -66,6 +66,7 @@ class Manifestation < ActiveRecord::Base
     string :isbn, :multiple => true do
       [isbn, isbn10, wrong_isbn]
     end
+    string :isdn
     string :issn, :multiple => true do
       if series_statement
         ([series_statement.issn] + series_statement.manifestations.pluck(:issn)).uniq.compact
@@ -155,6 +156,7 @@ class Manifestation < ActiveRecord::Base
     text :isbn do  # 前方一致検索のためtext指定を追加
       [isbn, isbn10, wrong_isbn]
     end
+    text :isdn # 前方一致検索のためtext指定を追加
     text :issn do # 前方一致検索のためtext指定を追加
       if series_statement
         ([series_statement.issn] + series_statement.manifestations.pluck(:issn)).uniq.compact
@@ -194,7 +196,7 @@ class Manifestation < ActiveRecord::Base
   validates :manifestation_identifier, :uniqueness => true, :allow_blank => true
   validates :pub_date, :format => {:with => /^\[{0,1}\d+([\/-]\d{0,2}){0,2}\]{0,1}$/}, :allow_blank => true
   validates :access_address, :url => true, :allow_blank => true, :length => {:maximum => 255}
-  validate :check_isbn, :check_issn, :check_lccn, :unless => :during_import
+  validate :check_isbn, :check_isdn, :check_issn, :check_lccn, :unless => :during_import
   validates :issue_number, :numericality => {:greater_than => 0}, :allow_blank => true
   validates :volume_number, :numericality => {:greater_than => 0}, :allow_blank => true
   validates :serial_number, :numericality => {:greater_than => 0}, :allow_blank => true
@@ -205,7 +207,7 @@ class Manifestation < ActiveRecord::Base
   before_save :set_date_of_publication, :set_number
   after_save :index_series_statement
   after_destroy :index_series_statement
-  normalize_attributes :manifestation_identifier, :pub_date, :isbn, :issn, :nbn, :lccn, :original_title
+  normalize_attributes :manifestation_identifier, :pub_date, :isbn, :isdn, :issn, :nbn, :lccn, :original_title
   attr_accessor :during_import
 
   def self.per_page
@@ -216,6 +218,14 @@ class Manifestation < ActiveRecord::Base
     if isbn.present?
       unless StdNum::ISBN.valid?(isbn)
         errors.add(:isbn)
+      end
+    end
+  end
+
+  def check_isdn
+    if isdn.present?
+      unless StdNum::ISBN.valid?(isdn)
+        errors.add(:isdn)
       end
     end
   end
@@ -356,6 +366,11 @@ class Manifestation < ActiveRecord::Base
 
   def hyphenated_isbn
     lisbn = Lisbn.new(isbn)
+    lisbn.parts.join('-')
+  end
+
+  def hyphenated_isdn
+    lisbn = Lisbn.new(isdn)
     lisbn.parts.join('-')
   end
 

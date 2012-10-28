@@ -9,6 +9,12 @@
 <th>ISBN</th>
 <td><%= @manifestation.isbn %></td>
 </tr>
+<%- if @manifestation.isdn.present? -%>
+<tr>
+<th>ISDN</th>
+<td><%= @manifestation.isdn %></td>
+</tr>
+<%- end -%>
 <tr>
 <th><%= t('activerecord.attributes.manifestation.price') %></th>
 <td><%= @manifestation.price %></td>

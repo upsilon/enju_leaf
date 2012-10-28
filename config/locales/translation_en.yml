@@ -277,6 +277,7 @@ en:
         isbn: ISBN
         isbn10: ISBN 10
         wrong_isbn: Wrong ISBN
+        isdn: ISDN
         nbn: NBN
         price: Price
         volume_number: Volume number (integer)
@@ -663,6 +664,7 @@ en:
     serial: "Serial"
     number: "Number"
     invalid_isbn: "Invalid ISBN."
+    invalid_isdn: "Invalid ISDN."
     already_imported: "This manifestation is already imporeted."
     record_not_found: "Record not found."
     add: "Add a manifestation"

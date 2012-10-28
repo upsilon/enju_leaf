@@ -546,6 +546,10 @@ class ManifestationsController < ApplicationController
       query = "#{query} isbn_sm:#{options[:isbn].gsub('-', '')}"
     end
 
+    unless options[:isdn].blank?
+      query = "#{query} isdn_s:#{options[:isdn].gsub('-', '')}"
+    end
+
     unless options[:issn].blank?
       query = "#{query} issn_sm:#{options[:issn].gsub('-', '')}"
     end
